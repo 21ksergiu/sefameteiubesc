@@ -6,35 +6,44 @@
     <title>Valentine's Day</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             text-align: center;
-            background-color: #ffccdc;
+            background: linear-gradient(135deg, #ff77ff, #ff99cc);
             padding: 50px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
             overflow: hidden;
         }
         .container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: inline-block;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 60px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
             position: relative;
-            z-index: 2;
         }
         h1 {
             color: #d63384;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-family: 'Pacifico', cursive;
         }
         .buttons {
             margin-top: 20px;
         }
         button {
-            font-size: 18px;
-            padding: 10px 20px;
+            font-size: 20px;
+            padding: 15px 30px;
             margin: 10px;
             border: none;
-            border-radius: 10px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
         .yes {
             background-color: #ff4081;
@@ -45,42 +54,74 @@
         .no {
             background-color: #333;
             color: white;
+            position: relative;
+            z-index: 1;
         }
-        .hidden {
-            display: none;
+        button:hover {
+            transform: scale(1.1);
+        }
+        #response {
+            background-color: transparent;
+            padding: 40px;
+            color: white;
+            border-radius: 25px;
+            position: relative;
+            z-index: 0;
+            display: none; /* Ascunde secțiunea de răspuns */
         }
         #message {
-            margin-top: 20px;
-            font-size: 30px;
+            font-size: 50px; /* Textul devine mai mare */
             color: #8e003f; /* Roz închis */
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
-        #image {
-            width: 350px;
-            margin-top: 10px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-        }
-        .pusheen-gif {
-            width: 200px;
-            margin-bottom: 10px;
-        }
-
-        /* Fără fundal */
-        #response {
-            background-color: #ffccdc; /* Fundal simplu, fără imagini */
-            padding: 50px;
-            color: white;
-            border-radius: 15px;
-            position: relative;
-        }
-
-        /* Poza cu Pusheen de sub text */
         #pusheen-collage {
-            width: 500px; /* Mărim colajul */
+            width: 250px; /* Gif-ul Pusheen devine puțin mai mare */
             margin-top: 20px;
+            border-radius: 15px;
         }
+
+        /* Animație vinil */
+        .vinyl {
+            width: 150px;
+            height: 150px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/71/LP_record.jpg');
+            background-size: cover;
+            border-radius: 50%;
+            margin: 50px auto;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Poof animation */
+        @keyframes poof {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.5);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        /* Adăugăm efectul de "poof" */
+        .poof {
+            animation: poof 1s ease-out forwards;
+        }
+
     </style>
 </head>
 <body>
@@ -97,7 +138,11 @@
     <div id="response" class="hidden">
         <p id="message">Știam eu că ești cea mai bună iubită din lume și vei accepta! 😻❤️</p>
         <img id="pusheen-collage" src="https://media1.tenor.com/m/5ILixFxXVxcAAAAC/pusheen-pusheen-cat.gif" alt="Colaj Pusheen">
+        <div class="vinyl"></div>
     </div>
+
+    <!-- Melodia Just The Way You Are -->
+    <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
 
     <script>
         let yesButton = document.getElementById("yes-btn");
@@ -128,12 +173,28 @@
                 yesButton.style.height = "100vh";
                 yesButton.style.fontSize = "50px";
                 yesButton.innerText = "Nu mai ai de ales 💖";
+
+                // Afișează secțiunea de răspuns și pornește melodia după 18 secunde
+                setTimeout(() => {
+                    document.getElementById('response').style.display = 'block'; // Afișează imaginea și vinilul
+                    document.getElementById('audio').currentTime = 18; // Setează melodia să înceapă de la secunda 18
+                    document.getElementById('audio').play(); // Pornește muzica
+                }, 1000); // Așteptăm 1 secundă după ce butonul devine mare
             }
         }
 
         function showMessage() {
-            document.getElementById('main-container').classList.add('hidden');
-            document.getElementById('response').classList.remove('hidden');
+            // Aplica efectul de poof pe containerul principal
+            let mainContainer = document.getElementById('main-container');
+            mainContainer.classList.add('poof');
+
+            // După 1 secundă, ascundem și afișăm răspunsul
+            setTimeout(() => {
+                mainContainer.style.display = 'none';
+                document.getElementById('response').style.display = 'block'; // Afișează secțiunea de răspuns
+                document.getElementById('audio').currentTime = 18; // Melodia va începe de la secunda 18
+                document.getElementById('audio').play(); // Pornește muzica
+            }, 1000); // Timpul efectului poof
         }
     </script>
 
